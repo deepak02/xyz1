@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import de.danoeh.antennapod.R;
+//DEEPAK
+import de.danoeh.antennapod.fragment.SubscriptionFragment;
 
 /**
  * Main navigation hub for gpodder.net podcast directory
@@ -66,7 +68,7 @@ public class GpodnetMainFragment extends Fragment {
     public class GpodnetPagerAdapter extends FragmentPagerAdapter {
 
 
-        private static final int NUM_PAGES = 2;
+        private static final int NUM_PAGES = 3;
         private static final int POS_TOPLIST = 0;
         private static final int POS_TAGS = 1;
         private static final int POS_SUGGESTIONS = 2;
@@ -86,7 +88,8 @@ public class GpodnetMainFragment extends Fragment {
                 case POS_TOPLIST:
                     return new PodcastTopListFragment();
                 case POS_SUGGESTIONS:
-                    return new SuggestionListFragment();
+                    //return new SuggestionListFragment();
+                    return new SubscriptionFragment();
                 default:
                     return null;
             }
@@ -100,7 +103,8 @@ public class GpodnetMainFragment extends Fragment {
                 case POS_TOPLIST:
                     return getString(R.string.gpodnet_toplist_header);
                 case POS_SUGGESTIONS:
-                    return getString(R.string.gpodnet_suggestions_header);
+                    //DEEPAK return getString(R.string.gpodnet_suggestions_header);
+                    return "SUBSCRIPTIONS";
                 default:
                     return super.getPageTitle(position);
             }

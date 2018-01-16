@@ -69,7 +69,8 @@ import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-
+//DEEPAK
+import de.danoeh.antennapod.fragment.gpodnet.GpodnetMainFragment;
 /**
  * The activity that is shown when the user launches the app.
  */
@@ -177,8 +178,11 @@ public class MainActivity extends CastEnabledActivity implements NavDrawerActivi
 
         FragmentTransaction transaction = fm.beginTransaction();
 
-        Fragment mainFragment = fm.findFragmentByTag("main");
+        //DEEPAK Fragment mainFragment = fm.findFragmentByTag("main");
+        //Fragment mainFragment = new SubscriptionFragment();
+        Fragment mainFragment = new GpodnetMainFragment();
         if (mainFragment != null) {
+            Log.d(TAG, "main Fragment() -> " + mainFragment);
             transaction.replace(R.id.main_view, mainFragment);
         } else {
             String lastFragment = getLastNavFragment();
