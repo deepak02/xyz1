@@ -41,12 +41,12 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion 27
         multiDexEnabled true
-        versionCode 2
-        versionName '0.2'
+        versionCode 3
+        versionName '0.3'
         testApplicationId "de.test.antennapod"
         testInstrumentationRunner "de.test.antennapod.AntennaPodTestRunner"
         generatedDensities = []
-        applicationId 'com.sakish.podx'
+        applicationId 'com.sakish.pod10'
     }
 
     signingConfigs {
