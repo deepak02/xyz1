@@ -137,6 +137,8 @@ configurations {
 }
 
 dependencies {
+    compile 'com.google.firebase:firebase-auth:11.6.0'
+    compile "com.google.android.gms:play-services-auth:11.6.0"
     freeDebugCompile project(path: ":core", configuration: "freeDebug")
     freeReleaseCompile project(path: ":core", configuration: "freeRelease")
 
@@ -222,3 +224,5 @@ allprojects {
         }
     }
 }
+
+apply plugin: 'com.google.gms.google-services'

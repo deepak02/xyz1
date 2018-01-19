@@ -102,6 +102,7 @@ public class MainActivity extends CastEnabledActivity implements NavDrawerActivi
             PlaybackHistoryFragment.TAG,
             AddFeedFragment.TAG,
             NavListAdapter.SUBSCRIPTION_LIST_TAG
+            //"Sign Out"
     };
 
     private Toolbar toolbar;
@@ -406,12 +407,23 @@ public class MainActivity extends CastEnabledActivity implements NavDrawerActivi
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             int viewType = parent.getAdapter().getItemViewType(position);
+            String tag1 = navAdapter.getTags().get(position);
+            if (tag1 == "Sign Out"){
+                signout();
+            }
             if (viewType != NavListAdapter.VIEW_TYPE_SECTION_DIVIDER && position != selectedNavListIndex) {
                 loadFragment(position, null);
             }
             drawerLayout.closeDrawer(navDrawer);
         }
     };
+
+    private void signout(){
+        Intent intent = new Intent(this, mygooglesignin.class);
+        intent.putExtra("message", "signout");
+        startActivity(intent);
+        finish();
+    }
 
     private AdapterView.OnItemLongClickListener newListLongClickListener = new AdapterView.OnItemLongClickListener() {
         @Override

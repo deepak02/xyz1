@@ -40,4 +40,9 @@
     <dimen name="media_router_controller_playback_control_start_padding">24dp</dimen>
     <dimen name="media_router_controller_bottom_margin">8dp</dimen>
 
+    <!--AUTH -->
+    <dimen name="title_bottom_margin">16dp</dimen>
+    <dimen name="icon_top_margin">24dp</dimen>
+    <dimen name="icon_bottom_margin">24dp</dimen>
+
 </resources>

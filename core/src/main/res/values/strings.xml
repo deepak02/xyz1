@@ -677,4 +677,15 @@
     <string name="cast_failed_seek">Failed to seek to the new position on the cast device</string>
     <string name="cast_failed_receiver_player_error">Receiver player has encountered a severe error</string>
     <string name="cast_failed_media_error_skipping">Error playing media. Skipping&#8230;</string>
+    <!--authenticate -->
+    <string name="google_status_fmt">Google User: %s</string>
+    <string name="google_title_text">Google Sign In</string>
+    <string name="signed_out">Signed Out</string>
+    <string name="firebase_status_fmt">Firebase User: %s</string>
+    <string name="loading">Loading…</string>
+    <string name="desc_firebase_lockup">Firebase logo and name</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="label_google_sign_in">Google Sign In</string>
+    <string name="label_sign_out">Sign Out</string>
 </resources>
