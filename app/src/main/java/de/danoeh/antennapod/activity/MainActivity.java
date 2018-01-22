@@ -102,8 +102,9 @@ public class MainActivity extends CastEnabledActivity implements NavDrawerActivi
             DownloadsFragment.TAG,
             PlaybackHistoryFragment.TAG,
             AddFeedFragment.TAG,
+            "Sign Out",
             NavListAdapter.SUBSCRIPTION_LIST_TAG
-            //"Sign Out"
+
     };
 
     private Toolbar toolbar;
@@ -414,13 +415,16 @@ public class MainActivity extends CastEnabledActivity implements NavDrawerActivi
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             int viewType = parent.getAdapter().getItemViewType(position);
-            String tag1 = navAdapter.getTags().get(position);
-            if (tag1 == "Sign Out"){
+            /*String tag1 = navAdapter.gettag1(position);
+            Log.d(TAG, "SIGN OUT CLICKED() -> " + tag1);
+           if (position==(navAdapter.getSubscriptionOffset()-1)){  //TODO - fix this with better code
+                Log.d(TAG, "SIGN OUT CLICKED() -> ");
                 signout();
-            }
-            if (viewType != NavListAdapter.VIEW_TYPE_SECTION_DIVIDER && position != selectedNavListIndex) {
+            } else{ */
+                if (viewType != NavListAdapter.VIEW_TYPE_SECTION_DIVIDER && position != selectedNavListIndex) {
                 loadFragment(position, null);
             }
+            //}
             drawerLayout.closeDrawer(navDrawer);
         }
     };

@@ -110,6 +110,12 @@ public class NavListAdapter extends BaseAdapter
         return titles[index];
     }
 
+    public String gettag1(int position) {
+
+        return tags.get(position);
+    }
+
+
     private Drawable getDrawable(String tag) {
         Activity context = activity.get();
         if(context == null) {
@@ -139,6 +145,9 @@ public class NavListAdapter extends BaseAdapter
                 icon = R.attr.ic_folder;
                 break;
             case AddFeedFragment.TAG:
+                icon = R.attr.content_new;
+                break;
+            case "Sign Out":
                 icon = R.attr.content_new;
                 break;
             default:
