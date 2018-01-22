@@ -239,7 +239,7 @@ public class ItunesSearchFragment extends Fragment {
         subscription = Observable.create((Observable.OnSubscribe<List<Podcast>>) subscriber -> {
                     String lang = Locale.getDefault().getLanguage();
                    // String url = "https://itunes.apple.com/" + lang + "/rss/toppodcasts/limit=25/explicit=true/json";
-            String url = "https://itunes.apple.com/in/rss/toppodcasts/limit=50/explicit=true/json";
+            String url = "https://itunes.apple.com/in/rss/toppodcasts/limit=200/explicit=true/json"; //itune limit changed to 200
                     OkHttpClient client = AntennapodHttpClient.getHttpClient();
                     Request.Builder httpReq = new Request.Builder()
                             .url(url)

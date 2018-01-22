@@ -29,6 +29,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.Validate;
@@ -122,10 +123,16 @@ public class MainActivity extends CastEnabledActivity implements NavDrawerActivi
 
     private Subscription subscription;
 
+    //Analytics
+    private FirebaseAnalytics mFirebaseAnalytics;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setTheme(UserPreferences.getNoTitleTheme());
         super.onCreate(savedInstanceState);
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         StorageUtils.checkStorageAvailability(this);
         setContentView(R.layout.main);
 

@@ -1,35 +1,35 @@
 {
   "project_info": {
-    "project_number": "211751482322",
-    "firebase_url": "https://antennapod-b4542.firebaseio.com",
-    "project_id": "antennapod-b4542",
-    "storage_bucket": "antennapod-b4542.appspot.com"
+    "project_number": "882207427038",
+    "firebase_url": "https://pod10-6fec0.firebaseio.com",
+    "project_id": "pod10-6fec0",
+    "storage_bucket": "pod10-6fec0.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:211751482322:android:0481113976c0bc68",
+        "mobilesdk_app_id": "1:882207427038:android:4c950e743a83bce0",
         "android_client_info": {
-          "package_name": "com.sakish.pod10.debug"
+          "package_name": "com.sakish.pod10"
         }
       },
       "oauth_client": [
         {
-          "client_id": "211751482322-flkerhuqqtp2leok1aegfq4d304cpddg.apps.googleusercontent.com",
+          "client_id": "882207427038-pm2neb503hf6fq3luoe1cj2fbiou52q7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.sakish.pod10.debug",
-            "certificate_hash": "ef8cf6893788a47f4b78510f358480cf27e12608"
+            "package_name": "com.sakish.pod10",
+            "certificate_hash": "4a69f062ea291f510a51b3486dab51004d2eca78"
           }
         },
         {
-          "client_id": "211751482322-d3dhujg0quum77onfnmbc8747p5g7h3q.apps.googleusercontent.com",
+          "client_id": "882207427038-c6vqvsu5457ir6tkskalbbocj1q51b5g.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA47UO56BhBmRznGFpqWUt0hGmodSC8y9w"
+          "current_key": "AIzaSyDMgmXgygzrdVlXC0vOVFSGJX1TXbh_v2I"
         }
       ],
       "services": {
@@ -40,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "211751482322-d3dhujg0quum77onfnmbc8747p5g7h3q.apps.googleusercontent.com",
+              "client_id": "882207427038-c6vqvsu5457ir6tkskalbbocj1q51b5g.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

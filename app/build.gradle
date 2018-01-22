@@ -39,10 +39,10 @@ android {
 
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion 27
+        targetSdkVersion 26
         multiDexEnabled true
-        versionCode 3
-        versionName '0.3'
+        versionCode 2001201801
+        versionName '0.4.2'
         testApplicationId "de.test.antennapod"
         testInstrumentationRunner "de.test.antennapod.AntennaPodTestRunner"
         generatedDensities = []
@@ -137,8 +137,9 @@ configurations {
 }
 
 dependencies {
+    compile 'com.google.firebase:firebase-core:11.6.0'
     compile 'com.google.firebase:firebase-auth:11.6.0'
-    compile "com.google.android.gms:play-services-auth:11.6.0"
+    compile 'com.google.android.gms:play-services-auth:11.6.0'
     freeDebugCompile project(path: ":core", configuration: "freeDebug")
     freeReleaseCompile project(path: ":core", configuration: "freeRelease")
 
