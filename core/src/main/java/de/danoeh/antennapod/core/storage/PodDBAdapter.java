@@ -121,6 +121,7 @@ public class PodDBAdapter {
     private static final String TABLE_NAME_QUEUE = "Queue";
     private static final String TABLE_NAME_SIMPLECHAPTERS = "SimpleChapters";
     private static final String TABLE_NAME_FAVORITES = "Favorites";
+    private static final String KEY_SUBSCRIBED = "SubscriptionDone";
 
     // SQL Statements for creating new tables
     private static final String TABLE_PRIMARY_KEY = KEY_ID
@@ -144,7 +145,8 @@ public class PodDBAdapter {
             + KEY_NEXT_PAGE_LINK + " TEXT,"
             + KEY_HIDE + " TEXT,"
             + KEY_LAST_UPDATE_FAILED + " INTEGER DEFAULT 0,"
-            + KEY_AUTO_DELETE_ACTION + " INTEGER DEFAULT 0)";
+            + KEY_AUTO_DELETE_ACTION + " INTEGER DEFAULT 0,"
+            + KEY_SUBSCRIBED + " TEXT DEFAULT 'NO' )";
 
     public static final String CREATE_TABLE_FEED_ITEMS = "CREATE TABLE "
             + TABLE_NAME_FEED_ITEMS + " (" + TABLE_PRIMARY_KEY + KEY_TITLE
@@ -1075,6 +1077,13 @@ public class PodDBAdapter {
                 KEY_TITLE + " COLLATE NOCASE ASC");
     }
 
+    //DEEPAK - get all temp feeds
+    public final Cursor getAllTempFeedsCursor() {
+        //return db.query(TABLE_NAME_FEEDS, FEED_SEL_STD, null, null, null, null,
+        return db.query(TABLE_NAME_FEEDS, FEED_SEL_STD, KEY_SUBSCRIBED + "=?",  new String[] {"NO"}, null, null,
+                KEY_TITLE + " COLLATE NOCASE ASC");
+    }
+
     public final Cursor getFeedCursorDownloadUrls() {
         return db.query(TABLE_NAME_FEEDS, new String[]{KEY_ID, KEY_DOWNLOAD_URL}, null, null, null, null, null);
     }
@@ -1232,6 +1241,16 @@ public class PodDBAdapter {
             sql += feedId > 0 ? " AND " : " WHERE ";
             sql += KEY_READ + "=" + oldState;
         }
+        db.execSQL(sql);
+    }
+
+    //DEEPAK - setting the subscription
+    public void setFeedSubscription(long feedid){
+        int sub=1;
+        String sql = "UPDATE " + TABLE_NAME_FEEDS + " SET " + KEY_SUBSCRIBED + "=" + "'YES'" ;
+        if (feedid > 0) {
+            sql += " WHERE " + KEY_ID + "=" + feedid;
+        };
         db.execSQL(sql);
     }
 

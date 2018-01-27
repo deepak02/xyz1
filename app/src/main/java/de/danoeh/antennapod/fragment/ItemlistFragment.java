@@ -20,6 +20,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
@@ -61,6 +62,7 @@ import de.danoeh.antennapod.core.service.download.DownloadService;
 import de.danoeh.antennapod.core.service.download.Downloader;
 import de.danoeh.antennapod.core.storage.DBReader;
 import de.danoeh.antennapod.core.storage.DBTasks;
+import de.danoeh.antennapod.core.storage.DBWriter;
 import de.danoeh.antennapod.core.storage.DownloadRequestException;
 import de.danoeh.antennapod.core.storage.DownloadRequester;
 import de.danoeh.antennapod.core.util.FeedItemUtil;
@@ -175,6 +177,7 @@ public class ItemlistFragment extends ListFragment {
     public void onDestroyView() {
         super.onDestroyView();
         resetViewState();
+      //  getActivity().getSupportFragmentManager().popBackStack();
     }
 
     private void resetViewState() {
@@ -487,7 +490,7 @@ public class ItemlistFragment extends ListFragment {
             txtvInformation.setVisibility(View.GONE);
         }
     }
-
+    private Button subscribeButton;
     private void setupHeaderView() {
         if (getListView() == null || feed == null) {
             Log.e(TAG, "Unable to setup listview: recyclerView = null or feed = null");
@@ -506,6 +509,8 @@ public class ItemlistFragment extends ListFragment {
         ImageButton butShowInfo = (ImageButton) header.findViewById(R.id.butShowInfo);
         txtvInformation = (TextView) header.findViewById(R.id.txtvInformation);
         txtvFailure = (IconTextView) header.findViewById(R.id.txtvFailure);
+        subscribeButton = (Button) header.findViewById(R.id.subscribe_button);
+        subscribeButton.setEnabled(true);
 
         txtvTitle.setText(feed.getTitle());
         txtvAuthor.setText(feed.getAuthor());
@@ -525,6 +530,13 @@ public class ItemlistFragment extends ListFragment {
             }
         });
         headerCreated = true;
+        subscribeButton.setOnClickListener(v -> {
+
+
+            DBWriter.subscribeFeed(feed.getId());
+            subscribeButton.setEnabled(false);
+            subscribeButton.setText("DONE");
+        });
     }
 
     private void loadFeedImage() {

@@ -137,6 +137,96 @@ public class DBWriter {
             }
         });
     }
+    /**DEEPAK
+     * Deletes a Feed and all downloaded files of its components like images and downloaded episodes
+     */
+    public static Future<?> deleteTempFeeds(final Context context) {
+        return dbExec.submit(() -> {
+            DownloadRequester requester = DownloadRequester.getInstance();
+            SharedPreferences prefs = PreferenceManager
+                    .getDefaultSharedPreferences(context
+                            .getApplicationContext());
+
+            //list of feeds
+            final List<Feed> feeds = DBReader.getTempFeedList();
+            for (Feed feed : feeds ){
+            if (feed != null) {
+                //Don not delete feed if currently playing media from that feed
+                if (PlaybackPreferences.getCurrentlyPlayingMedia() == FeedMedia.PLAYABLE_TYPE_FEEDMEDIA
+                        && PlaybackPreferences.getLastPlayedFeedId() == feed
+                        .getId()) {
+                } else
+                    // put additional else - do not delete if there are pending downloads or existing downloaded
+                    // episodes from that feed
+                    {
+                // delete image file
+                if (feed.getImage() != null) {
+                    if (feed.getImage().isDownloaded()
+                            && feed.getImage().getFile_url() != null) {
+                        File imageFile = new File(feed.getImage()
+                                .getFile_url());
+                        imageFile.delete();
+                    } else if (requester.isDownloadingFile(feed.getImage())) {
+                        requester.cancelDownload(context, feed.getImage());
+                    }
+                }
+                // delete stored media files and mark them as read
+                List<FeedItem> queue = DBReader.getQueue();
+                List<FeedItem> removed = new ArrayList<>();
+                if (feed.getItems() == null) {
+                    DBReader.getFeedItemList(feed);
+                }
+
+                for (FeedItem item : feed.getItems()) {
+                    if(queue.remove(item)) {
+                        removed.add(item);
+                    }
+                    if (item.getMedia() != null
+                            && item.getMedia().isDownloaded()) {
+                        File mediaFile = new File(item.getMedia()
+                                .getFile_url());
+                        mediaFile.delete();
+                    } else if (item.getMedia() != null
+                            && requester.isDownloadingFile(item.getMedia())) {
+                        requester.cancelDownload(context, item.getMedia());
+                    }
+
+                    if (item.hasItemImage()) {
+                        FeedImage image = item.getImage();
+                        if (image.isDownloaded() && image.getFile_url() != null) {
+                            File imgFile = new File(image.getFile_url());
+                            imgFile.delete();
+                        } else if (requester.isDownloadingFile(image)) {
+                            requester.cancelDownload(context, item.getImage());
+                        }
+                    }
+                }
+                PodDBAdapter adapter = PodDBAdapter.getInstance();
+                adapter.open();
+                if (removed.size() > 0) {
+                    adapter.setQueue(queue);
+                    for(FeedItem item : removed) {
+                        EventBus.getDefault().post(QueueEvent.irreversibleRemoved(item));
+                    }
+                }
+                adapter.removeFeed(feed);
+                adapter.close();
+
+                if (ClientConfig.gpodnetCallbacks.gpodnetEnabled()) {
+                    GpodnetPreferences.addRemovedFeed(feed.getDownload_url());
+                }
+                EventDistributor.getInstance().sendFeedUpdateBroadcast();
+
+                // we assume we also removed download log entries for the feed or its media files.
+                // especially important if download or refresh failed, as the user should not be able
+                // to retry these
+                EventDistributor.getInstance().sendDownloadLogUpdateBroadcast();
+
+                BackupManager backupManager = new BackupManager(context);
+                backupManager.dataChanged();
+            }}}
+        });
+    }
 
     /**
      * Deletes a Feed and all downloaded files of its components like images and downloaded episodes.
@@ -231,6 +321,17 @@ public class DBWriter {
                 BackupManager backupManager = new BackupManager(context);
                 backupManager.dataChanged();
             }
+        });
+    }
+
+    //DEEPAK - subscribe to the feed
+    public static Future<?> subscribeFeed(long feedId) {
+        return dbExec.submit(() -> {
+            PodDBAdapter adapter = PodDBAdapter.getInstance();
+            adapter.open();
+            adapter.setFeedSubscription(feedId);
+            adapter.close();
+            EventDistributor.getInstance().sendPlaybackHistoryUpdateBroadcast();
         });
     }
 

@@ -111,7 +111,8 @@ public class OnlineFeedViewActivity extends AppCompatActivity {
                         .subscribe(
                                 feeds -> {
                                     OnlineFeedViewActivity.this.feeds = feeds;
-                                    setSubscribeButtonState(feed);
+                                   // setSubscribeButtonState(feed);
+                                    //ChangetoMain();
                                 }, error -> {
                                     Log.e(TAG, Log.getStackTraceString(error));
                                 }
@@ -412,6 +413,31 @@ public class OnlineFeedViewActivity extends AppCompatActivity {
         title.setText(feed.getTitle());
         author.setText(feed.getAuthor());
         description.setText(feed.getDescription());
+        if(feed != null && feedInFeedlist(feed)) {
+            Intent intent = new Intent(this, MainActivity.class);
+            // feed.getId() is always 0, we have to retrieve the id from the feed list from
+            // the database
+            intent.putExtra(MainActivity.EXTRA_FEED_ID, getFeedId(feed));
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        } else {
+            Feed f = new Feed(selectedDownloadUrl, null, feed.getTitle());
+            f.setPreferences(feed.getPreferences());
+            this.feed = f;
+            try {
+                DownloadRequester.getInstance().downloadFeed(this, f);
+            } catch (DownloadRequestException e) {
+                Log.e(TAG, Log.getStackTraceString(e));
+                DownloadRequestErrorDialogCreator.newRequestErrorDialog(this, e.getMessage());
+            }
+            setSubscribeButtonState(feed);
+         /*   Intent intent = new Intent(this, MainActivity.class);
+            // feed.getId() is always 0, we have to retrieve the id from the feed list from
+            // the database
+            intent.putExtra(MainActivity.EXTRA_FEED_ID, getFeedId(feed));
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent); */
+        }
 
         subscribeButton.setOnClickListener(v -> {
             if(feed != null && feedInFeedlist(feed)) {
@@ -482,6 +508,14 @@ public class OnlineFeedViewActivity extends AppCompatActivity {
                 subscribeButton.setText(R.string.subscribe_label);
             }
         }
+    }
+    private void ChangetoMain(){
+        Intent intent = new Intent(this, MainActivity.class);
+        // feed.getId() is always 0, we have to retrieve the id from the feed list from
+        // the database
+        intent.putExtra(MainActivity.EXTRA_FEED_ID, getFeedId(feed));
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     private boolean feedInFeedlist(Feed feed) {

@@ -8,7 +8,7 @@
     <string name="provider_authority" translate="false">com.sakish.pod10.provider</string>
     <string name="feeds_label">Feeds</string>
     <string name="statistics_label">Statistics</string>
-    <string name="add_feed_label">Add Podcast</string>
+    <string name="add_feed_label">Home</string>
     <string name="episodes_label">Episodes</string>
     <string name="all_episodes_short_label">All</string>
     <string name="favorite_episodes_label">Favorites</string>

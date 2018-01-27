@@ -41,8 +41,8 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion 26
         multiDexEnabled true
-        versionCode 2001201801
-        versionName '0.4.2'
+        versionCode 2001201804
+        versionName '0.4.5'
         testApplicationId "de.test.antennapod"
         testInstrumentationRunner "de.test.antennapod.AntennaPodTestRunner"
         generatedDensities = []
@@ -71,6 +71,10 @@ android {
             } else {
                 keyPassword "password"
             }
+            keyAlias 'key0'
+            keyPassword 'Deepak_123'
+            storeFile file('F:/playstore/radiox.jks')
+            storePassword 'deepak@gupta123'
         }
     }
 

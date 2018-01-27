@@ -105,4 +105,13 @@
         tools:text="(i) Information"
         />
 
+    <Button
+        android:id="@+id/subscribe_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imgvBackground"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:text="Subscribe" />
+
 </RelativeLayout>

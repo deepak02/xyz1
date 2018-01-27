@@ -27,6 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -34,11 +35,13 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.Validate;
 
+import java.io.File;
 import java.util.List;
 
 import de.danoeh.antennapod.R;
 import de.danoeh.antennapod.adapter.NavListAdapter;
 import de.danoeh.antennapod.core.asynctask.FeedRemover;
+import de.danoeh.antennapod.core.asynctask.TempFeedRemover;
 import de.danoeh.antennapod.core.dialog.ConfirmationDialog;
 import de.danoeh.antennapod.core.event.MessageEvent;
 import de.danoeh.antennapod.core.event.ProgressEvent;
@@ -96,12 +99,13 @@ public class MainActivity extends CastEnabledActivity implements NavDrawerActivi
     public static final String SAVE_TITLE = "title";
 
     public static final String[] NAV_DRAWER_TAGS = {
+            AddFeedFragment.TAG,
             QueueFragment.TAG,
             EpisodesFragment.TAG,
             SubscriptionFragment.TAG,
             DownloadsFragment.TAG,
             PlaybackHistoryFragment.TAG,
-            AddFeedFragment.TAG,
+            //AddFeedFragment.TAG,
             "Sign Out",
             NavListAdapter.SUBSCRIPTION_LIST_TAG
 
@@ -133,6 +137,8 @@ public class MainActivity extends CastEnabledActivity implements NavDrawerActivi
         setTheme(UserPreferences.getNoTitleTheme());
         super.onCreate(savedInstanceState);
         // Obtain the FirebaseAnalytics instance.
+        final TempFeedRemover Tempremover = new TempFeedRemover(this);
+        Tempremover.executeAsync();
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         StorageUtils.checkStorageAvailability(this);
         setContentView(R.layout.main);
@@ -310,7 +316,7 @@ public class MainActivity extends CastEnabledActivity implements NavDrawerActivi
                 fragment = new PlaybackHistoryFragment();
                 break;
             case AddFeedFragment.TAG:
-                fragment = new AddFeedFragment();
+                fragment = new GpodnetMainFragment();
                 break;
             case SubscriptionFragment.TAG:
                 SubscriptionFragment subscriptionFragment = new SubscriptionFragment();
@@ -650,7 +656,7 @@ public class MainActivity extends CastEnabledActivity implements NavDrawerActivi
         if(isDrawerOpen()) {
             drawerLayout.closeDrawer(navDrawer);
         } else {
-            super.onBackPressed();
+            onBackPressed1();
         }
     }
 
@@ -813,5 +819,30 @@ public class MainActivity extends CastEnabledActivity implements NavDrawerActivi
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
+    }
+
+    boolean doubleBackToExitPressedOnce = false;
+
+
+    public void onBackPressed1() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        //getFragmentManager().popBackStack();
+        final FragmentManager fm = getSupportFragmentManager();
+        fm.popBackStack();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000);
     }
 }

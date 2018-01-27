@@ -85,7 +85,36 @@ public final class DBReader {
             }
         }
     }
+    //DEEPAK
+    //DEEPAKTODO - check if temp feeds are 0
 
+    public static List<Feed> getTempFeedList() {
+        Log.d(TAG, "Extracting Feedlist");
+
+        PodDBAdapter adapter = PodDBAdapter.getInstance();
+        adapter.open();
+        try {
+            return getTempFeedList(adapter);
+        } finally {
+            adapter.close();
+        }
+    }
+    private static List<Feed> getTempFeedList(PodDBAdapter adapter) {
+        Cursor cursor = null;
+        try {
+            cursor = adapter.getAllTempFeedsCursor();
+            List<Feed> feeds = new ArrayList<>(cursor.getCount());
+            while (cursor.moveToNext()) {
+                Feed feed = extractFeedFromCursorRow(adapter, cursor);
+                feeds.add(feed);
+            }
+            return feeds;
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
     /**
      * Returns a list with the download URLs of all feeds.
      *

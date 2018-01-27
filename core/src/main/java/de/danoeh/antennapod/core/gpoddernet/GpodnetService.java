@@ -46,8 +46,10 @@ public class GpodnetService {
     private static final String TAG = "GpodnetService";
 
     private static final String BASE_SCHEME = "http";
+    //private static final String BASE_SCHEME = "https";
 
     public static final String DEFAULT_BASE_HOST = "ec2-54-157-221-126.compute-1.amazonaws.com";
+    //public static final String DEFAULT_BASE_HOST = "gpodder.net";
     private final String BASE_HOST;
 
     private static final MediaType TEXT = MediaType.parse("plain/text; charset=utf-8");
