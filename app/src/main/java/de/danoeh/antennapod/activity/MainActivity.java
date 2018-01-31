@@ -10,6 +10,7 @@ import android.database.DataSetObserver;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -31,11 +32,15 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.Validate;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
 
 import de.danoeh.antennapod.R;
@@ -48,6 +53,7 @@ import de.danoeh.antennapod.core.event.ProgressEvent;
 import de.danoeh.antennapod.core.event.QueueEvent;
 import de.danoeh.antennapod.core.feed.EventDistributor;
 import de.danoeh.antennapod.core.feed.Feed;
+import de.danoeh.antennapod.core.feed.FeedMedia;
 import de.danoeh.antennapod.core.preferences.PlaybackPreferences;
 import de.danoeh.antennapod.core.preferences.UserPreferences;
 import de.danoeh.antennapod.core.service.playback.PlaybackService;
@@ -130,7 +136,62 @@ public class MainActivity extends CastEnabledActivity implements NavDrawerActivi
 
     //Analytics
     private FirebaseAnalytics mFirebaseAnalytics;
+    private EventDistributor.EventListener listener = new EventDistributor.EventListener() {
+        @Override
+        public void update(EventDistributor eventDistributor, Integer arg) {
+            if ((arg & EventDistributor.CURRENT_MEDIA_UPDATE) != 0) {
+                SharedPreferences prefs = PreferenceManager
+                        .getDefaultSharedPreferences(getApplicationContext());
+                long feedId = prefs.getLong(PlaybackPreferences.PREF_CURRENTLY_PLAYING_FEED_ID,
+                        PlaybackPreferences.NO_MEDIA_PLAYING);
+                long mediaId = prefs.getLong(
+                        PlaybackPreferences.PREF_CURRENTLY_PLAYING_FEEDMEDIA_ID,
+                        PlaybackPreferences.NO_MEDIA_PLAYING);
+                boolean isStream = prefs.getBoolean(
+                        PlaybackPreferences.PREF_CURRENT_EPISODE_IS_STREAM,
+                        false);
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                Feed feed = DBReader.getFeed(feedId);
+                FeedMedia feedMedia = DBReader.getFeedMedia(mediaId);
 
+                //User Name, ID, Feed Title, Episode Title
+                String Username = user.getDisplayName();
+                String userId = user.getUid();
+                String feedTitle = feed.getTitle();
+                String episode = feedMedia.getEpisodeTitle();
+
+                //send this information to Firebase Analytics
+                sendToFirebase(Username, userId, feedTitle, episode);
+
+              /*  updater = Observable.fromCallable(DBReader::getFeedList)
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                feeds -> {
+                                    OnlineFeedViewActivity.this.feeds = feeds;
+                                    // setSubscribeButtonState(feed);
+                                    //ChangetoMain();
+                                }, error -> {
+                                    Log.e(TAG, Log.getStackTraceString(error));
+                                }
+                        ); */
+            }
+        }
+    };
+
+    private void readCurrentPlayedMedia(){
+    }
+
+    private void sendToFirebase (String uname, String uid, String feed, String episode){
+        String Date= DateFormat.getDateTimeInstance().format(new Date());
+        Bundle params = new Bundle();
+        params.putString("User_name", uname);
+        params.putString("User_id", uid);
+        params.putString("Feed_id", feed);
+        params.putString("episode_id", episode);
+        params.putString("time", Date);
+        mFirebaseAnalytics.logEvent("played_episode", params);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -486,6 +547,7 @@ public class MainActivity extends CastEnabledActivity implements NavDrawerActivi
     public void onStart() {
         super.onStart();
         EventDistributor.getInstance().register(contentUpdate);
+        EventDistributor.getInstance().register(listener);
         EventBus.getDefault().register(this);
         RatingDialog.init(this);
     }
@@ -515,6 +577,7 @@ public class MainActivity extends CastEnabledActivity implements NavDrawerActivi
     protected void onStop() {
         super.onStop();
         EventDistributor.getInstance().unregister(contentUpdate);
+        EventDistributor.getInstance().unregister(listener);
         EventBus.getDefault().unregister(this);
         if(subscription != null) {
             subscription.unsubscribe();

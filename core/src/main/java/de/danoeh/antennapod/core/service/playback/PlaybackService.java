@@ -50,6 +50,7 @@ import de.danoeh.antennapod.core.ClientConfig;
 import de.danoeh.antennapod.core.R;
 import de.danoeh.antennapod.core.event.MessageEvent;
 import de.danoeh.antennapod.core.feed.Chapter;
+import de.danoeh.antennapod.core.feed.EventDistributor;
 import de.danoeh.antennapod.core.feed.Feed;
 import de.danoeh.antennapod.core.feed.FeedItem;
 import de.danoeh.antennapod.core.feed.FeedMedia;
@@ -999,6 +1000,7 @@ public class PlaybackService extends MediaBrowserServiceCompat {
                 PlaybackPreferences.PREF_CURRENT_PLAYER_STATUS, playerStatus);
 
         editor.commit();
+        EventDistributor.getInstance().sendCurrentMediaUpdateBroadcast();
     }
 
     private void writePlayerStatusPlaybackPreferences() {

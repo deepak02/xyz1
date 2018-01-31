@@ -26,6 +26,7 @@ public class EventDistributor extends Observable {
 	public static final int PLAYBACK_HISTORY_UPDATE = 16;
 	public static final int DOWNLOAD_HANDLED = 64;
     public static final int PLAYER_STATUS_UPDATE = 128;
+	public static final int CURRENT_MEDIA_UPDATE = 256;
 
 	private Handler handler;
 	private AbstractQueue<Integer> events;
@@ -95,6 +96,8 @@ public class EventDistributor extends Observable {
 	}
 
     public void sendPlayerStatusUpdateBroadcast() { addEvent(PLAYER_STATUS_UPDATE); }
+
+    public void sendCurrentMediaUpdateBroadcast() {addEvent(CURRENT_MEDIA_UPDATE);}
 
 	public abstract static class EventListener implements Observer {
 
