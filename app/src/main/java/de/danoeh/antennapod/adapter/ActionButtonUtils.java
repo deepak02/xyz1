@@ -61,7 +61,7 @@ public class ActionButtonUtils {
                     butSecondary.setImageDrawable(drawables.getDrawable(1));
                     butSecondary.setContentDescription(context.getString(labels[1]));
                 } else {
-                    // item is not downloaded and not being downloaded
+                   /* // item is not downloaded and not being downloaded
                     if(DefaultActionButtonCallback.userAllowedMobileDownloads() ||
                             !DefaultActionButtonCallback.userChoseAddToQueue() || isInQueue) {
                         butSecondary.setVisibility(View.VISIBLE);
@@ -72,7 +72,14 @@ public class ActionButtonUtils {
                         butSecondary.setVisibility(View.VISIBLE);
                         butSecondary.setImageDrawable(drawables.getDrawable(5));
                         butSecondary.setContentDescription(context.getString(labels[4]));
+                    }*/
+                    butSecondary.setVisibility(View.VISIBLE);
+                    if (media.isCurrentlyPlaying()) {
+                        butSecondary.setImageDrawable(drawables.getDrawable(3));
+                    } else {
+                        butSecondary.setImageDrawable(drawables.getDrawable(0));
                     }
+                    butSecondary.setContentDescription(context.getString(labels[0]));
                 }
             } else {
                 // item is downloaded

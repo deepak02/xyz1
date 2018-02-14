@@ -41,8 +41,8 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion 26
         multiDexEnabled true
-        versionCode 2001201805
-        versionName '0.4.5'
+        versionCode 2001201809
+        versionName '0.4.9'
         testApplicationId "de.test.antennapod"
         testInstrumentationRunner "de.test.antennapod.AntennaPodTestRunner"
         generatedDensities = []
@@ -141,6 +141,7 @@ configurations {
 }
 
 dependencies {
+    compile 'com.google.firebase:firebase-messaging:11.6.0'
     compile 'com.google.firebase:firebase-invites:11.6.0'
     compile 'com.google.firebase:firebase-core:11.6.0'
     compile 'com.google.firebase:firebase-auth:11.6.0'

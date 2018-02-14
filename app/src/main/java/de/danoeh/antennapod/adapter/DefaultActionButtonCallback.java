@@ -97,6 +97,48 @@ public class DefaultActionButtonCallback implements ActionButtonCallback {
         }
     }
 
+    @Override
+    public void onActionButtonPressedNew(final FeedItem item, final LongList queueIds) {
+
+        if (item.hasMedia()) {
+            final FeedMedia media = item.getMedia();
+            boolean isDownloading = DownloadRequester.getInstance().isDownloadingFile(media);
+            if (!isDownloading && !media.isDownloaded()) {
+                if (item.hasMedia() && item.getMedia().isCurrentlyPlaying()) {
+                    context.sendBroadcast(new Intent(PlaybackService.ACTION_PAUSE_PLAY_CURRENT_EPISODE));
+                }
+                else if (item.hasMedia() && item.getMedia().isCurrentlyPaused()) {
+                    context.sendBroadcast(new Intent(PlaybackService.ACTION_RESUME_PLAY_CURRENT_EPISODE));
+                }
+                else {
+                    DBTasks.playMedia(context, media, false, true, true);
+                }
+
+            } else if (isDownloading) {
+                DownloadRequester.getInstance().cancelDownload(context, media);
+                if(UserPreferences.isEnableAutodownload()) {
+                    DBWriter.setFeedItemAutoDownload(media.getItem(), false);
+                    Toast.makeText(context, R.string.download_canceled_autodownload_enabled_msg, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(context, R.string.download_canceled_msg, Toast.LENGTH_LONG).show();
+                }
+            } else { // media is downloaded
+                if (item.hasMedia() && item.getMedia().isCurrentlyPlaying()) {
+                    context.sendBroadcast(new Intent(PlaybackService.ACTION_PAUSE_PLAY_CURRENT_EPISODE));
+                }
+                else if (item.hasMedia() && item.getMedia().isCurrentlyPaused()) {
+                    context.sendBroadcast(new Intent(PlaybackService.ACTION_RESUME_PLAY_CURRENT_EPISODE));
+                }
+                else {
+                    DBTasks.playMedia(context, media, false, true, false);
+                }
+            }
+        } else {
+            if (!item.isPlayed()) {
+                DBWriter.markItemPlayed(item, FeedItem.PLAYED, true);
+            }
+        }
+    }
     private void confirmMobileDownload(final Context context, final FeedItem item) {
         MaterialDialog.Builder builder = new MaterialDialog.Builder(context);
         builder

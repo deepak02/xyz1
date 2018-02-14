@@ -140,7 +140,7 @@ public class SubscriptionsAdapter extends BaseAdapter implements AdapterView.OnI
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (position == getAddTilePosition()) {
-            mainActivityRef.get().loadChildFragment(new AddFeedFragment());
+            //mainActivityRef.get().loadChildFragment(new AddFeedFragment());
         } else {
             Fragment fragment = ItemlistFragment.newInstance(getItemId(position));
             mainActivityRef.get().loadChildFragment(fragment);

@@ -134,7 +134,7 @@ public class PodDBAdapter {
             + KEY_DESCRIPTION + " TEXT," + KEY_PAYMENT_LINK + " TEXT,"
             + KEY_LASTUPDATE + " TEXT," + KEY_LANGUAGE + " TEXT," + KEY_AUTHOR
             + " TEXT," + KEY_IMAGE + " INTEGER," + KEY_TYPE + " TEXT,"
-            + KEY_FEED_IDENTIFIER + " TEXT," + KEY_AUTO_DOWNLOAD + " INTEGER DEFAULT 1,"
+            + KEY_FEED_IDENTIFIER + " TEXT," + KEY_AUTO_DOWNLOAD + " INTEGER DEFAULT 0,"
             + KEY_FLATTR_STATUS + " INTEGER,"
             + KEY_USERNAME + " TEXT,"
             + KEY_PASSWORD + " TEXT,"
